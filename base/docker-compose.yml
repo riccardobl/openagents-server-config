@@ -1,0 +1,48 @@
+
+services:
+
+  certbot:
+    image: certbot/dns-cloudflare
+    volumes:
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      - /srv/openagents/letsencrypt/log:/var/log/letsencrypt
+      - /srv/openagents/letsencrypt/lib:/var/lib/letsencrypt
+      - /srv/openagents/letsencrypt/cf.ini:/etc/letsencrypt/cf.ini
+    command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${DOMAIN}  --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
+
+        
+  gateway:
+    image: caddy:2-alpine
+    restart: always
+    volumes:
+      - /srv/openagents/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+    ports:
+      - "7777:7777"
+      - "5080:5080"
+    networks:
+      - openagents-network
+    
+  openobserve:
+    image: public.ecr.aws/zinclabs/openobserve:latest
+    restart: unless-stopped
+    environment:
+      ZO_ROOT_USER_EMAIL: ${OPENOBSERVE_ROOT_EMAIL}
+      ZO_ROOT_USER_PASSWORD: ${OPENOBSERVE_ROOT_PASSWORD}
+    volumes:
+      - /srv/openagents/openobserve:/data
+    networks:
+      - openagents-network
+
+  nostr-relay:
+    image: ghcr.io/hoytech/strfry:latest
+    restart: always
+    volumes:
+      - /srv/openagents/nostr-relay/strfry.conf:/etc/strfry.conf
+      - /srv/openagents/nostr-relay/data:/app/strfry-db
+    networks:
+      - openagents-network
+   
+networks:
+  openagents-network:
+    driver: bridge

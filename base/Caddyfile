@@ -1,0 +1,9 @@
+:7777 {
+  tls /etc/letsencrypt/live/${DOMAIN}/fullchain.pem /etc/letsencrypt/live/${DOMAIN}/privkey.pem
+  reverse_proxy http://nostr-relay:7777
+}
+
+:5080 {
+  tls /etc/letsencrypt/live/${DOMAIN}/fullchain.pem /etc/letsencrypt/live/${DOMAIN}/privkey.pem
+  reverse_proxy http://openobserve:5080
+}

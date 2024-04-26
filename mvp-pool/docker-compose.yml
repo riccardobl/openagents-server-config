@@ -1,0 +1,85 @@
+services:
+
+  certbot:
+    image: certbot/dns-cloudflare
+    volumes:
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      - /srv/openagents/letsencrypt/log:/var/log/letsencrypt
+      - /srv/openagents/letsencrypt/lib:/var/lib/letsencrypt
+      - /srv/openagents/letsencrypt/cf.ini:/etc/letsencrypt/cf.ini
+    command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${DOMAIN}  --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
+  
+
+  pool:
+    image: ghcr.io/riccardobl/openagents-pool:master
+    restart: always
+    networks:
+      - openagents-mvp-network
+    environment:
+      - NOSTR_RELAYS=${NOSTR_RELAYS}
+      - GRPC_SERVER_CRT=/etc/letsencrypt/live/${DOMAIN}/fullchain.pem
+      - GRPC_SERVER_KEY=/etc/letsencrypt/live/${DOMAIN}/privkey.pem
+    volumes:
+      - /srv/openagents/pool/blobs:/blobs
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+    ports:
+      - "5000:5000"
+
+
+  extism-runtime:
+    image: ghcr.io/riccardobl/openagents-extism-runtime-node:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - SECRETS_PROVIDERS=/secrets/secrets.json
+    volumes:
+      -  /srv/openagents/extism-runtime/secrets:/secrets
+    networks:
+      - openagents-mvp-network
+
+  search:
+    image: ghcr.io/riccardobl/openagents-search:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+    volumes:
+      - /srv/openagents/search/cache:/cache
+    networks:
+      - openagents-mvp-network
+
+    
+  embeddings:
+    image: ghcr.io/riccardobl/openagents-embeddings:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - CACHE_PATH=/cache
+      - TRANSFORMERS_DEVICE=${EMBEDDING_DEVICE}
+      - MODEL=${EMBEDDING_MODEL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    volumes:
+      - /srv/openagents/embeddings/cache:/cache
+    networks:
+      - openagents-mvp-network
+
+  retrieval:
+    image: ghcr.io/riccardobl/openagents-document-retrieval:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+    volumes:
+      - /srv/openagents/retrieval/cache:/cache
+    networks:
+      - openagents-mvp-network
+
+networks:
+  openagents-mvp-network:
+    driver: bridge
