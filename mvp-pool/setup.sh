@@ -1,6 +1,7 @@
 #!/bin/bash
 # export CF_DNS_APITOKEN="...."
 set -e
+source .env
 
 mkdir -p /srv/openagents/letsencrypt
 

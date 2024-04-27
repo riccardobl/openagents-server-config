@@ -24,7 +24,7 @@ cp -f strfry.conf /srv/openagents/nostr-relay/strfry.conf
 # Copy caddy config
 mkdir -p /srv/openagents/caddy/
 cp Caddyfile Caddyfile.tmp
-sed -i "s/\${DOMAIN}/$DOMAIN/g" Caddyfile.tmp
+# sed -i "s/\${DOMAIN}/$DOMAIN/g" Caddyfile.tmp
 cp -f Caddyfile.tmp /srv/openagents/caddy/Caddyfile
 
 

@@ -8,7 +8,7 @@ services:
       - /srv/openagents/letsencrypt/log:/var/log/letsencrypt
       - /srv/openagents/letsencrypt/lib:/var/lib/letsencrypt
       - /srv/openagents/letsencrypt/cf.ini:/etc/letsencrypt/cf.ini
-    command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${DOMAIN}  --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
+    command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${SSL_DOMAINS} --cert-name openagents --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
 
         
   gateway:
