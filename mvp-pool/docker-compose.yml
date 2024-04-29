@@ -11,14 +11,23 @@ services:
   
 
   pool:
-    image: ghcr.io/riccardobl/openagents-pool:master
+    image: ghcr.io/openagentsinc/openagents-pool:master
     restart: always
     networks:
       - openagents-mvp-network
     environment:
       - NOSTR_RELAYS=${NOSTR_RELAYS}
-      - GRPC_SERVER_CRT=/etc/letsencrypt/live/mvp-pool/fullchain.pem
-      - GRPC_SERVER_KEY=/etc/letsencrypt/live/mvp-pool/privkey.pem
+      - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
+      - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/mvp-pool/fullchain.pem
+      - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/mvp-pool/privkey.pem
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
     volumes:
       - /srv/openagents/pool/blobs:/blobs
       - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
@@ -27,25 +36,42 @@ services:
 
 
   extism-runtime:
-    image: ghcr.io/riccardobl/openagents-extism-runtime-node:master
+    image: ghcr.io/openagentsinc/openagents-extism-runtime:master
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
-      - SECRETS_PROVIDERS=/secrets/secrets.json
+      - EXTISM_RUNTIME_SECRETS_PROVIDERS=/secrets/secrets.json
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+
     volumes:
       -  /srv/openagents/extism-runtime/secrets:/secrets
     networks:
       - openagents-mvp-network
 
   search:
-    image: ghcr.io/riccardobl/openagents-search:master
+    image: ghcr.io/openagentsinc/openagents-search:master
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
     volumes:
       - /srv/openagents/search/cache:/cache
     networks:
@@ -53,28 +79,45 @@ services:
 
     
   embeddings:
-    image: ghcr.io/riccardobl/openagents-embeddings:master
+    image: ghcr.io/openagentsinc/openagents-embeddings:master
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
       - CACHE_PATH=/cache
-      - TRANSFORMERS_DEVICE=${EMBEDDING_DEVICE}
-      - MODEL=${EMBEDDING_MODEL}
+      - EMBEDDINGS_TRANSFORMERS_DEVICE=${EMBEDDING_DEVICE}
+      - EMBEDDINGS_MODEL=${EMBEDDING_MODEL}
       - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
     volumes:
       - /srv/openagents/embeddings/cache:/cache
     networks:
       - openagents-mvp-network
 
   retrieval:
-    image: ghcr.io/riccardobl/openagents-document-retrieval:master
+    image: ghcr.io/openagentsinc/openagents-document-retrieval:master
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+
     volumes:
       - /srv/openagents/retrieval/cache:/cache
     networks:
