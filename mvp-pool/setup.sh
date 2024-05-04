@@ -5,6 +5,9 @@ source .env
 
 mkdir -p /srv/openagents/letsencrypt
 
+# Set permissions
+chown 1000:1000 -Rf /srv/openagents
+setfacl -d -m u:1000:rwx,g:1000:rwx  /srv/openagents
 
 # Configure Letsencrypt
 if [ "$CF_DNS_APITOKEN" != "" ]; then
