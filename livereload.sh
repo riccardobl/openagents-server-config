@@ -17,6 +17,7 @@ if [ "$RELOAD_SECRET" != "" ]; then
         SECRET=$(echo $REQUEST | grep -oP 'GET /\?secret=\K[^ ]*')
         if [ "$SECRET" = "$RELOAD_SECRET" ]; then
             echo "Secret matches. Refreshing containers..."
+            git pull origin master
             bash up.sh
         else 
             echo "Secret does not match. Ignoring request."
