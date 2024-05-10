@@ -18,8 +18,7 @@ services:
     volumes:
       - /srv/openagents/nostr-relay/strfry.conf:/etc/strfry.conf
       - /srv/openagents/nostr-relay/data:/app/strfry-db
-    networks:
-      - openagents-network
+
     network_mode: host
 
 
@@ -37,8 +36,7 @@ services:
   pool:
     image: ghcr.io/openagentsinc/openagents-pool:master
     restart: always
-    networks:
-      - openagents-mvp-network
+  
     environment:
       - NOSTR_RELAYS=${NOSTR_RELAYS}
       - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
