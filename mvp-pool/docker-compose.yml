@@ -29,10 +29,11 @@ services:
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
       - POOL_EVENTS_WEBHOOK_ENDPOINTS=${POOL_EVENTS_WEBHOOK_ENDPOINTS}
-      - POOL_AUTH_SERVICE=${POOL_AUTH_SERVICE}
+      - POOL_AUTH_SERVICE=json:/auth/auth.json
     volumes:
       - /srv/openagents/pool/blobs:/blobs
       - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      - /srv/openagents/pool/auth/:/auth
     ports:
       - "5000:5000"
 
