@@ -3,6 +3,8 @@
 set -e
 source .env
 
+mkdir -p /srv/openagents/
+mkdir -p /srv/openagents/nostr-relay
 mkdir -p /srv/openagents/letsencrypt
 
 # Set permissions
