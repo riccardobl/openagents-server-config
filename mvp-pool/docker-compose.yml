@@ -11,7 +11,7 @@ services:
   
 
   pool:
-    image: ghcr.io/openagentsinc/openagents-pool@sha256:ec23a10f14ace7ed857632ce7a460b5205739358ccc100440751862884e13fb4
+    image: ghcr.io/openagentsinc/openagents-pool@sha256:9818d87842e70d025ca4d90e24efaf462f5691a4e285446ae80a9bd42458e601
     restart: always
     networks:
       - openagents-mvp-network
