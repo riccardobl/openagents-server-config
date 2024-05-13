@@ -63,7 +63,7 @@ services:
       - openagents-mvp-network
 
   search:
-    image: ghcr.io/openagentsinc/openagents-search@sha256:af9bf92ab72b3c075f806167e9385a3bbed66feb2c6bf5f22e44ed498bedbeff
+    image: ghcr.io/openagentsinc/openagents-search@sha256:19dba55de2e1639e5696d90caddd33457205ad66546b40d1f09c99724ed2d4c3
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -86,7 +86,7 @@ services:
 
     
   embeddings:
-    image: ghcr.io/openagentsinc/openagents-embeddings@sha256:6f0de93e81ce071ffa30608da986b081206cd608c384b812799f2a60925dc656
+    image: ghcr.io/openagentsinc/openagents-embeddings@sha256:56a7187030054d621f82b8a42c665b0457bda97b3a1ed96890098711ba4da1d8
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -113,7 +113,7 @@ services:
       - openagents-mvp-network
 
   retrieval:
-    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:3acbbf3226c9c0af586ed6867a1cf01828fa6e4f4fc27f2986f5deb7af7749ac
+    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:f0d6f87b223aa56ad7422779c632a70fd72a875e15d59c6326d549be8ddb541e
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
