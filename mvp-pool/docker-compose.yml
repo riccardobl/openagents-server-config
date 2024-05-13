@@ -11,7 +11,7 @@ services:
   
 
   pool:
-    image: ghcr.io/openagentsinc/openagents-pool:master
+    image: ghcr.io/openagentsinc/openagents-pool@sha256:b08a62c9a7a486c5395cf0b190fc177048d07cb06722f06c466c9972f3adcbe3
     restart: always
     networks:
       - openagents-mvp-network
@@ -30,6 +30,7 @@ services:
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
       - POOL_EVENTS_WEBHOOK_ENDPOINTS=${POOL_EVENTS_WEBHOOK_ENDPOINTS}
       - POOL_AUTH_SERVICE=json:/auth/auth.json
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       - /srv/openagents/pool/blobs:/blobs
       - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
@@ -39,7 +40,7 @@ services:
 
 
   extism-runtime:
-    image: ghcr.io/openagentsinc/openagents-extism-runtime:master
+    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:1dff60ffe7d1a7bbabd450c0524fd841f8cf560599de160f4ec0ede5cf0a00e2
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -55,14 +56,14 @@ services:
       - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
-
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       -  /srv/openagents/extism-runtime/secrets:/secrets
     networks:
       - openagents-mvp-network
 
   search:
-    image: ghcr.io/openagentsinc/openagents-search:master
+    image: ghcr.io/openagentsinc/openagents-search@sha256:af9bf92ab72b3c075f806167e9385a3bbed66feb2c6bf5f22e44ed498bedbeff
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -77,6 +78,7 @@ services:
       - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       - /srv/openagents/search/cache:/cache
     networks:
@@ -84,7 +86,7 @@ services:
 
     
   embeddings:
-    image: ghcr.io/openagentsinc/openagents-embeddings:master
+    image: ghcr.io/openagentsinc/openagents-embeddings@sha256:6f0de93e81ce071ffa30608da986b081206cd608c384b812799f2a60925dc656
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -104,13 +106,14 @@ services:
       - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       - /srv/openagents/embeddings/cache:/cache
     networks:
       - openagents-mvp-network
 
   retrieval:
-    image: ghcr.io/openagentsinc/openagents-document-retrieval:master
+    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:3acbbf3226c9c0af586ed6867a1cf01828fa6e4f4fc27f2986f5deb7af7749ac
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -125,7 +128,7 @@ services:
       - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
-
+      - LOG_LEVEL=${LOG_LEVEL}
     volumes:
       - /srv/openagents/retrieval/cache:/cache
     networks:
