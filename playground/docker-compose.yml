@@ -1,0 +1,207 @@
+services:
+  certbot:
+    image: certbot/dns-cloudflare
+    volumes:
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      - /srv/openagents/letsencrypt/log:/var/log/letsencrypt
+      - /srv/openagents/letsencrypt/lib:/var/lib/letsencrypt
+      - /srv/openagents/letsencrypt/cf.ini:/etc/letsencrypt/cf.ini
+    command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${SSL_DOMAINS} --cert-name pool  --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
+
+  pool:
+    image: ghcr.io/openagentsinc/openagents-pool:master
+    restart: always
+    networks:
+      - openagents-network
+    environment:
+      - NOSTR_RELAYS=${NOSTR_RELAYS}
+      - POOL_GRPC_BINDING_PORT=5021
+      - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
+      - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/pool/fullchain.pem
+      - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/pool/privkey.pem
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - POOL_EVENTS_WEBHOOK_ENDPOINTS=${POOL_EVENTS_WEBHOOK_ENDPOINTS}
+      - POOL_AUTH_SERVICE=json:/auth/auth.json
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/pool/blobs:/blobs
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      - /srv/openagents/pool/auth/:/auth
+    ports:
+      - "5021:5021"
+      - "5000:5021"
+
+
+  openpool:
+    image: ghcr.io/openagentsinc/openagents-pool:master
+    restart: always
+    networks:
+      - openagents-network
+    environment:
+      - NOSTR_RELAYS=${NOSTR_RELAYS}
+      - POOL_GRPC_BINDING_PORT=6021
+      - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
+      - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/pool/fullchain.pem
+      - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/pool/privkey.pem
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - POOL_EVENTS_WEBHOOK_ENDPOINTS=${POOL_EVENTS_WEBHOOK_ENDPOINTS}
+      - POOL_AUTH_SERVICE=
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/poolopen/blobs:/blobs
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+    ports:
+      - "6021:6021"
+      - "6000:6021"
+
+
+
+
+  extism-runtime:
+    image: ghcr.io/openagentsinc/openagents-extism-runtime:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - EXTISM_RUNTIME_SECRETS_PROVIDERS=/secrets/secrets.json
+      - NODE_TOKEN=${EXTISM_RUNTIME_NODE_TOKEN}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      -  /srv/openagents/extism-runtime/secrets:/secrets
+    networks:
+      - openagents-network
+
+  search:
+    image: ghcr.io/openagentsinc/openagents-search:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - NODE_TOKEN=${SEARCH_NODE_TOKEN}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/search/cache:/cache
+    networks:
+      - openagents-network
+
+    
+  embeddings:
+    image: ghcr.io/openagentsinc/openagents-embeddings:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - CACHE_PATH=/cache
+      - EMBEDDINGS_TRANSFORMERS_DEVICE=${EMBEDDINGS_TRANSFORMERS_DEVICE}
+      - EMBEDDINGS_MODEL=${EMBEDDINGS_MODEL}
+      - EMBEDDINGS_MAX_TEXT_LENGTH=${EMBEDDINGS_MAX_TEXT_LENGTH}
+      - NODE_TOKEN=${EMBEDDINGS_NODE_TOKEN}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/embeddings/cache:/cache
+    networks:
+      - openagents-network
+
+  retrieval:
+    image: ghcr.io/openagentsinc/openagents-document-retrieval:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - NODE_TOKEN=${DOCUMENT_RETRIEVAL_NODE_TOKEN}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/retrieval/cache:/cache
+    networks:
+      - openagents-network
+
+
+  tools:
+    image: ghcr.io/openagentsinc/openagents-tools:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - NODE_TOKEN=${TOOLS_NODE_TOKEN}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+    volumes:
+      - /srv/openagents/tools/cache:/cache
+    networks:
+      - openagents-network
+
+  hookproxy:
+    image: ghcr.io/openagentsinc/openagents-webhook-proxy:master
+    restart: always
+    environment:
+      - SERVER_CRT=/etc/letsencrypt/live/pool/fullchain.pem
+      - SERVER_KEY=/etc/letsencrypt/live/pool/privkey.pem
+    volumes:
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+    networks:
+      - openagents-network
+    ports:
+      - "3000:3000"
+
+networks:
+  openagents-network:
+    driver: bridge
