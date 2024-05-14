@@ -201,6 +201,7 @@ services:
       - openagents-network
     ports:
       - "3000:3000"
+    command: server
 
 networks:
   openagents-network:
