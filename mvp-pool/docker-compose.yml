@@ -113,7 +113,7 @@ services:
       - openagents-mvp-network
 
   retrieval:
-    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:44a98a225655ce13022e9ea1cf8a235534c3b22004eee2f88c9fb31cef2b214b
+    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:14ba1ff9ea46abb7d684664aec6f49ea0cfa4607a8d72e427c1da4a10c80f39f
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
