@@ -143,7 +143,7 @@ services:
     volumes:
       - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
     networks:
-      - openagents-network
+      - openagents-mvp-network
     ports:
       - "3000:3000"
     command: server
