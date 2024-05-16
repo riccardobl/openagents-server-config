@@ -134,6 +134,21 @@ services:
     networks:
       - openagents-mvp-network
 
+    hookproxy:
+      image: ghcr.io/openagentsinc/openagents-webhook-proxy:master
+      restart: always
+      environment:
+        - SERVER_CRT=/etc/letsencrypt/live/mvp-pool/fullchain.pem
+        - SERVER_KEY=/etc/letsencrypt/live/mvp-pool/privkey.pem
+      volumes:
+        - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+      networks:
+        - openagents-network
+      ports:
+        - "3000:3000"
+      command: server
+
+
 networks:
   openagents-mvp-network:
     driver: bridge
