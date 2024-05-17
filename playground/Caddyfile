@@ -1,0 +1,11 @@
+
+
+:5080 {
+  tls /etc/letsencrypt/live/openagents/fullchain.pem /etc/letsencrypt/live/openagents/privkey.pem
+  reverse_proxy http://openobserve:5080
+}
+
+:5081 {
+  tls /etc/letsencrypt/live/openagents/fullchain.pem /etc/letsencrypt/live/openagents/privkey.pem
+  reverse_proxy http://openobserve:5081
+}
