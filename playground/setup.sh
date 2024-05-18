@@ -18,9 +18,10 @@ else
    echo "No Cloudflare DNS API Token found. Please set CF_DNS_APITOKEN environment variable"
    exit 0
 fi
+
 # Copy caddy config
-mkdir -p /srv/openagents/caddy/
-cp -f Caddyfile /srv/openagents/caddy/Caddyfile
+# mkdir -p /srv/openagents/caddy/
+# cp -f Caddyfile /srv/openagents/caddy/Caddyfile
 
 
 

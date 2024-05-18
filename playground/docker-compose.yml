@@ -8,29 +8,6 @@ services:
       - /srv/openagents/letsencrypt/cf.ini:/etc/letsencrypt/cf.ini
     command: certonly --dns-cloudflare --dns-cloudflare-credentials /etc/letsencrypt/cf.ini -d ${SSL_DOMAINS} --cert-name openagents  --dns-cloudflare-propagation-seconds 60  --non-interactive --expand --agree-tos -m $SSL_EMAIL
 
-  gateway:
-    image: caddy:2-alpine
-    restart: always
-    volumes:
-      - /srv/openagents/caddy/Caddyfile:/etc/caddy/Caddyfile
-      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
-    ports:
-      - "5080:5080"
-      - "5081:5081"
-    networks:
-      - openagents-network
-    
-
-  openobserve:
-    image: public.ecr.aws/zinclabs/openobserve:latest
-    restart: unless-stopped
-    environment:
-      ZO_ROOT_USER_EMAIL: ${OPENOBSERVE_ROOT_EMAIL}
-      ZO_ROOT_USER_PASSWORD: ${OPENOBSERVE_ROOT_PASSWORD}
-    volumes:
-      - /srv/openagents/openobserve:/data
-    networks:
-      - openagents-network
 
   pool:
     image: ghcr.io/openagentsinc/openagents-pool:master
@@ -39,7 +16,7 @@ services:
       - openagents-network
     environment:
       - NOSTR_RELAYS=${NOSTR_RELAYS}
-      - POOL_GRPC_BINDING_PORT=5021
+      - POOL_GRPC_BINDING_PORT=${POOL_PORT}
       - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
       - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/openagents/fullchain.pem
       - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/openagents/privkey.pem
@@ -63,34 +40,34 @@ services:
       - "5000:5021"
 
 
-  # openpool:
-  #   image: ghcr.io/openagentsinc/openagents-pool:master
-  #   restart: always
-  #   networks:
-  #     - openagents-network
-  #   environment:
-  #     - NOSTR_RELAYS=${NOSTR_RELAYS}
-  #     - POOL_GRPC_BINDING_PORT=6021
-  #     - POOL_NOSTR_SECRET_KEY=${POOL_NOSTR_SECRET_KEY}
-  #     - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/openagents/fullchain.pem
-  #     - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/openagents/privkey.pem
-  #     - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
-  #     - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
-  #     - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
-  #     - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
-  #     - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
-  #     - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
-  #     - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
-  #     - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
-  #     - POOL_EVENTS_WEBHOOK_ENDPOINTS=${POOL_EVENTS_WEBHOOK_ENDPOINTS}
-  #     - POOL_AUTH_SERVICE=
-  #     - LOG_LEVEL=${LOG_LEVEL}
-  #   volumes:
-  #     - /srv/openagents/poolopen/blobs:/blobs
-  #     - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
-  #   ports:
-  #     - "6021:6021"
-  #     - "6000:6021"
+  openpool:
+    image: ghcr.io/openagentsinc/openagents-pool:master
+    restart: always
+    networks:
+      - openagents-network
+    environment:
+      - NOSTR_RELAYS=${OPEN_POOL_NOSTR_RELAYS}
+      - POOL_GRPC_BINDING_PORT=${OPEN_POOL_PORT}
+      - POOL_NOSTR_SECRET_KEY=${OPEN_POOL_NOSTR_SECRET_KEY}
+      - POOL_GRPC_SERVER_CRT=/etc/letsencrypt/live/openagents/fullchain.pem
+      - POOL_GRPC_SERVER_KEY=/etc/letsencrypt/live/openagents/privkey.pem
+      - OPENOBSERVE_ENDPOINT=${OPEN_POOL_OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPEN_POOL_OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPEN_POOL_OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPEN_POOL_OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPEN_POOL_OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPEN_POOL_OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPEN_POOL_OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPEN_POOL_OPENOBSERVE_LOG_LEVEL}
+      - POOL_EVENTS_WEBHOOK_ENDPOINTS=${OPEN_POOL_EVENTS_WEBHOOK_ENDPOINTS}
+      - POOL_AUTH_SERVICE=
+      - LOG_LEVEL=${OPEN_POOL_LOG_LEVEL}
+    volumes:
+      - /srv/openagents/poolopen/blobs:/blobs
+      - /srv/openagents/letsencrypt/etc:/etc/letsencrypt
+    ports:
+      - "6021:6021"
+      - "6000:6021"
 
 
 
