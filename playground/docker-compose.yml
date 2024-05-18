@@ -44,7 +44,7 @@ services:
     image: ghcr.io/openagentsinc/openagents-pool:master
     restart: always
     networks:
-      - openagents-network
+      - openagents-open-network
     environment:
       - NOSTR_RELAYS=${OPEN_POOL_NOSTR_RELAYS}
       - POOL_GRPC_BINDING_PORT=${OPEN_POOL_PORT}
