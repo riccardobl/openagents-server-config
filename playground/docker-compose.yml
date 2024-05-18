@@ -207,3 +207,5 @@ services:
 networks:
   openagents-network:
     driver: bridge
+  openagents-open-network:
+    driver: bridge
