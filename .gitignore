@@ -1,3 +1,4 @@
 .env
 Caddyfile.tmp
 .livereload.env
+private.pem
