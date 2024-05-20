@@ -167,6 +167,7 @@ services:
       - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
       - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
       - LOG_LEVEL=${LOG_LEVEL}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
     volumes:
       - /srv/openagents/tools/cache:/cache
     networks:
