@@ -11,7 +11,7 @@ services:
   
 
   pool:
-    image: ghcr.io/openagentsinc/openagents-pool@sha256:9ff3b84c286b61f9a8b7cbdd39b398b50c86950ad35ddc1c4150c565916d26c3
+    image: ghcr.io/openagentsinc/openagents-pool@sha256:7121ecbe212f9c5a8e41d272188cd0927d5c1b148adff4fa874e33400e517721
     restart: always
     networks:
       - openagents-mvp-network
@@ -41,7 +41,7 @@ services:
 
 
   extism-runtime:
-    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:096d31bfb1b118c746b046929ed404dd2169be14e7e214c5daeab764db6b7d68
+    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:992cbb7adae757cc163401158547004c2b9259a19a2e14942622422009942e5f
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -152,7 +152,7 @@ services:
     command: server
 
   tools:
-    image: ghcr.io/openagentsinc/openagents-tools:master
+    image: ghcr.io/openagentsinc/openagents-tools@sha256:e7905508178e41fb87ff99b4c89453f5cf51be8f5228c36e4fe975207b117460
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
