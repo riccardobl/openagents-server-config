@@ -11,7 +11,7 @@ services:
   
 
   pool:
-    image: ghcr.io/openagentsinc/openagents-pool@sha256:7121ecbe212f9c5a8e41d272188cd0927d5c1b148adff4fa874e33400e517721
+    image: ghcr.io/openagentsinc/openagents-pool@sha256:438c5cf94e792c8f6f29af22ebff94fafb5a0bd8efcde90f15a4d24a6f6cedbe
     restart: always
     networks:
       - openagents-mvp-network
@@ -41,7 +41,7 @@ services:
 
 
   extism-runtime:
-    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:0a7f964940afaae650e5486dfd816d756de44e59708644c806fb77b37e07a8b4
+    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:043e2fbddbadfc9beaabd6feeef3e6ee3d47ed6961490268536785b06eeb4aea
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -66,7 +66,7 @@ services:
       - openagents-mvp-network
 
   search:
-    image: ghcr.io/openagentsinc/openagents-search@sha256:c78e0a65b69168e7c03cb73f7e336b7acb5920e4eadd94b77b6103e6c817433f
+    image: ghcr.io/openagentsinc/openagents-search@sha256:85b9154d0cb47aa52b1214a8d497ebe74b8f7defef9fcb7577910cec9f0fc447
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -89,7 +89,7 @@ services:
 
     
   embeddings:
-    image: ghcr.io/openagentsinc/openagents-embeddings@sha256:16ebbc1d3b2bcb6300252698290cd5d5ddc931d5f7fb93622a021ef458f6557d
+    image: ghcr.io/openagentsinc/openagents-embeddings@sha256:440b16ef4e53c9508666b3e5f460e5decaebd1713cbd39772cb515bb82f26fda
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -116,7 +116,7 @@ services:
       - openagents-mvp-network
 
   retrieval:
-    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:81abc77df5986a7e4d947135b270b43ad8267344963099c50c30926f36c12c93
+    image: ghcr.io/openagentsinc/openagents-document-retrieval@sha256:549132abf219ad3b7866f96f44b896e0c96e68f3efed48f7cc2f2e825cc4262c
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
@@ -152,7 +152,7 @@ services:
     command: server
 
   tools:
-    image: ghcr.io/openagentsinc/openagents-tools@sha256:e7905508178e41fb87ff99b4c89453f5cf51be8f5228c36e4fe975207b117460
+    image: ghcr.io/openagentsinc/openagents-tools@sha256:ff46f3453627ca6048961ac8636d7a8d8172ac0eb0b87a984a14cd12f7e64115
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
