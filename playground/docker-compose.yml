@@ -81,7 +81,7 @@ services:
       - POOL_SSL=${POOL_SSL}
       - EXTISM_RUNTIME_SECRETS_PROVIDERS=https://raw.githubusercontent.com/OpenAgentsInc/openagents-plugins/master/secrets.json
       - EXTISM_RUNTIME_SECRETS_KEY=/secrets/private.pem
-      - PLUGINS_REPO=https://raw.githubusercontent.com/OpenAgentsInc/openagents-plugins/master/index.json5
+      - PLUGINS_REPO=https://staging.openagents.com/api/v1/plugins
       - NODE_TOKEN=${EXTISM_RUNTIME_NODE_TOKEN}
       - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
       - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
@@ -206,6 +206,31 @@ services:
     ports:
       - "3000:3000"
     command: server
+
+  
+  open-retrieval:
+    image: ghcr.io/openagentsinc/openagents-document-retrieval:master
+    restart: always
+    environment:
+      - POOL_ADDRESS=${POOL_ADDRESS}
+      - POOL_PORT=${OPEN_POOL_PORT}
+      - POOL_SSL=${POOL_SSL}
+      - NODE_TOKEN=${DOCUMENT_RETRIEVAL_NODE_TOKEN}
+      - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
+      - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
+      - OPENOBSERVE_STREAM=${OPENOBSERVE_STREAM}
+      - OPENOBSERVE_USERNAME=${OPENOBSERVE_USERNAME}
+      - OPENOBSERVE_PASSWORD=${OPENOBSERVE_PASSWORD}
+      - OPENOBSERVE_BATCHSIZE=${OPENOBSERVE_BATCHSIZE}
+      - OPENOBSERVE_FLUSH_INTERVAL=${OPENOBSERVE_FLUSH_INTERVAL}
+      - OPENOBSERVE_LOG_LEVEL=${OPENOBSERVE_LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - PRICE_SATS="${DOCUMENT_RETRIEVAL_PRICE_SATS}"
+      - NWC="${DOCUMENT_RETRIEVAL_NWC}"
+    volumes:
+      - /srv/openagents/retrieval/cache:/cache
+    networks:
+      - openagents-network
 
 networks:
   openagents-network:
