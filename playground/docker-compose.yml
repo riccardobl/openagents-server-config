@@ -79,8 +79,7 @@ services:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
-      - EXTISM_RUNTIME_SECRETS_PROVIDERS=https://raw.githubusercontent.com/OpenAgentsInc/openagents-plugins/master/secrets.json
-      - EXTISM_RUNTIME_SECRETS_KEY=/secrets/private.pem
+      - EXTISM_RUNTIME_SECRETS_PROVIDERS=https://staging.openagents.com/api/v1/plugins/secrets?secret=${EXTISM_RUNTIME_PLUGINS_SECRET}
       - PLUGINS_REPO=https://staging.openagents.com/api/v1/plugins
       - NODE_TOKEN=${EXTISM_RUNTIME_NODE_TOKEN}
       - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
