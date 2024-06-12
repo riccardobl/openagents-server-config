@@ -41,7 +41,7 @@ services:
 
 
   extism-runtime:
-    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:0932bb54fb855249adfe16e965d02546d38ecf0ff6f6cfc4d5d22ccb561bfdf9
+    image: ghcr.io/openagentsinc/openagents-extism-runtime@sha256:485ee00318c6af2dfb2ba7891a27bb19f5c99406924cb5d518863575a088ca73
     restart: always
     environment:
       - POOL_ADDRESS=${POOL_ADDRESS}
