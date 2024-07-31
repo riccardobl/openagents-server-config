@@ -47,8 +47,8 @@ services:
       - POOL_ADDRESS=${POOL_ADDRESS}
       - POOL_PORT=${POOL_PORT}
       - POOL_SSL=${POOL_SSL}
-      - EXTISM_RUNTIME_SECRETS_PROVIDERS=https://openagents.com/api/v1/plugins/secrets?secret=${EXTISM_RUNTIME_PLUGINS_SECRET}
-      - PLUGINS_REPO=https://openagents.com/api/v1/plugins
+      - EXTISM_RUNTIME_SECRETS_PROVIDERS=https://chat.openagents.com/api/v1/plugins/secrets?secret=${EXTISM_RUNTIME_PLUGINS_SECRET}
+      - PLUGINS_REPO=https://chat.openagents.com/api/v1/plugins
       - NODE_TOKEN=${EXTISM_RUNTIME_NODE_TOKEN}
       - OPENOBSERVE_ENDPOINT=${OPENOBSERVE_ENDPOINT}
       - OPENOBSERVE_ORG=${OPENOBSERVE_ORG}
